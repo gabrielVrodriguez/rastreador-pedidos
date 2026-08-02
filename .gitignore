@@ -34,6 +34,7 @@ build/
 
 ### Contexto local (não deve ser publicado) ###
 CLAUDE.md
+.docs/
 .env
 .env.local
 node_modules/
