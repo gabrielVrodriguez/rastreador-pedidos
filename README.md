@@ -23,16 +23,28 @@ desenvolvimento.
 
 - Java 21
 - Variável de ambiente `JWT_SECRET` — uma string de pelo menos 32 caracteres,
-  usada para assinar os tokens JWT.
+  usada para assinar os tokens JWT. As variáveis necessárias estão listadas em
+  `.env.example` (apenas documentação — não é lido pela aplicação).
 
 ## Como rodar
+
+PowerShell:
+
+```powershell
+$env:JWT_SECRET = "uma-chave-secreta-de-pelo-menos-32-caracteres"
+./mvnw spring-boot:run
+```
+
+Bash/Linux/macOS:
 
 ```bash
 export JWT_SECRET="uma-chave-secreta-de-pelo-menos-32-caracteres"
 ./mvnw spring-boot:run
 ```
 
-A API sobe em `http://localhost:8080`.
+A API sobe em `http://localhost:8080`. Pra não precisar setar a variável a
+cada terminal novo, configure-a no `Run/Debug Configuration` da sua IDE
+(no IntelliJ: `Environment variables`).
 
 ## Rodando os testes
 
