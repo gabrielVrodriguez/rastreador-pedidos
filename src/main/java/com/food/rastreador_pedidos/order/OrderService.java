@@ -1,11 +1,13 @@
 package com.food.rastreador_pedidos.order;
 
+import com.food.rastreador_pedidos.common.BusinessException;
 import com.food.rastreador_pedidos.common.ResourceNotFoundException;
 import com.food.rastreador_pedidos.order.dto.CreateOrderRequest;
 import com.food.rastreador_pedidos.order.dto.OrderItemRequest;
 import com.food.rastreador_pedidos.order.dto.OrderItemResponse;
 import com.food.rastreador_pedidos.order.dto.OrderResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +55,15 @@ public class OrderService {
     @Transactional
     public OrderResponse atualizarStatus(Long id, OrderStatus novoStatus) {
         Order order = buscarEntidadePorId(id);
+        OrderStatus statusAtual = order.getStatus();
+
+        if (!statusAtual.podeTransicionarPara(novoStatus)) {
+            throw new BusinessException(
+                    "Não é possível mudar o status de %s para %s".formatted(statusAtual, novoStatus),
+                    HttpStatus.CONFLICT
+            );
+        }
+
         order.setStatus(novoStatus);
         return toResponse(order);
     }
