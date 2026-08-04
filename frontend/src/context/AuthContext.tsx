@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface AuthContextValue {
   isAuthenticated: boolean
@@ -10,6 +11,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'))
+  const queryClient = useQueryClient()
 
   function login(newToken: string) {
     localStorage.setItem('token', newToken)
@@ -19,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function logout() {
     localStorage.removeItem('token')
     setToken(null)
+    queryClient.clear()
   }
 
   return (

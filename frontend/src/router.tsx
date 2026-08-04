@@ -3,8 +3,8 @@ import { App } from './App'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { OrdersListPage } from './pages/OrdersListPage'
-import { NewOrderPage } from './pages/NewOrderPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { AppShell } from './components/AppShell'
 
 export const router = createBrowserRouter([
   {
@@ -16,8 +16,10 @@ export const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
-          { path: 'pedidos', element: <OrdersListPage /> },
-          { path: 'pedidos/novo', element: <NewOrderPage /> },
+          {
+            element: <AppShell />,
+            children: [{ path: 'pedidos', element: <OrdersListPage /> }],
+          },
         ],
       },
     ],
