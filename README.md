@@ -1,12 +1,10 @@
 # Rastreador de Pedidos
 
-Projeto pessoal para praticar Java e Spring Boot, vindo de uma experiência
-prévia com Node.js e NestJS. Sistema simplificado de rastreamento de pedidos de
-delivery: cadastro/login de usuário, criação de pedidos e acompanhamento do
-status de entrega.
+Sistema de rastreamento de pedidos de delivery: cadastro/login de usuário,
+criação de pedidos e acompanhamento do status de entrega, do recebimento até
+a entrega.
 
-Backend concluído. Front-end (React + Vite + TypeScript + MUI) em
-desenvolvimento.
+![Tela de listagem de pedidos](docs/tela-pedidos.png)
 
 ## Stack
 
@@ -14,18 +12,26 @@ desenvolvimento.
 |---|---|
 | Linguagem | Java 21 |
 | Framework | Spring Boot 4.1 |
-| Build | Maven (via `mvnw`) |
+| Build (back) | Maven (via `mvnw`) |
 | Persistência | SQLite + Spring Data JPA (Hibernate) |
 | Segurança | Spring Security 7 + JWT |
-| Testes | JUnit 5 + Mockito + JaCoCo |
+| Testes (back) | JUnit 5 + Mockito + JaCoCo |
+| Front-end | React 19 + TypeScript |
+| Build (front) | Vite |
+| UI | MUI (Material UI) |
+| Requisições HTTP / cache | Axios + TanStack Query |
+| Roteamento | React Router |
 
 ## Pré-requisitos
 
 - Java 21
+- Node.js 20+
 - Variável de ambiente `JWT_SECRET` — uma string de pelo menos 32 caracteres,
   usada para assinar os tokens JWT.
 
 ## Como rodar
+
+### Backend
 
 ```bash
 export JWT_SECRET="uma-chave-secreta-de-pelo-menos-32-caracteres"
@@ -33,6 +39,18 @@ export JWT_SECRET="uma-chave-secreta-de-pelo-menos-32-caracteres"
 ```
 
 A API sobe em `http://localhost:8080`.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+A aplicação sobe em `http://localhost:5173` e já aponta para
+`http://localhost:8080` por padrão. Para apontar para outro endereço, crie um
+`frontend/.env` com `VITE_API_URL=http://outro-host:porta`.
 
 ## Rodando os testes
 
@@ -85,3 +103,16 @@ a partir deles.
   rodar o projeto localmente; a camada de persistência usa Spring Data JPA, o
   que tornaria a troca para outro banco relacional uma mudança de
   configuração, não de código.
+- **Busca, filtro e paginação da listagem no front**, sem suporte dedicado no
+  back — o volume de pedidos por usuário não justifica paginação no servidor
+  agora, e manter essa lógica no front evita uma ida à API a cada tecla
+  digitada na busca.
+- **Pedidos ordenados pelo estágio** (Recebido → Entregue/Cancelado) em vez de
+  por data de criação — prioriza visualmente os pedidos que ainda precisam de
+  ação sobre os já finalizados.
+- **Drawer lateral para o detalhe do pedido** em vez de uma rota própria —
+  evita perder o contexto da lista (filtros, página) ao inspecionar um
+  pedido, e mantém as ações de avançar/cancelar no mesmo lugar.
+- **Token JWT em `localStorage`** injetado por um interceptor do Axios, com
+  logout limpando o cache do TanStack Query — evita que dados da sessão
+  anterior vazem para a próxima.
