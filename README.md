@@ -111,6 +111,13 @@ a partir deles.
   testável sem depender de infraestrutura.
 - **Autenticação stateless com JWT** em vez de sessão — API sem estado no
   servidor, mais simples de escalar horizontalmente.
+- **Pedidos não são isolados por usuário** — qualquer usuário autenticado
+  enxerga e opera sobre o mesmo conjunto de pedidos. Faz sentido para uma
+  única operação de delivery com múltiplos atendentes compartilhando a mesma
+  fila; não é o modelo certo para um cenário multi-tenant, onde cada usuário
+  deveria ver só os próprios pedidos. Nesse segundo caso, o caminho seria
+  outro: relacionar `Order` a `User` e filtrar as queries do `OrderService`
+  pelo usuário autenticado extraído do token, em vez de listar globalmente.
 - **SQLite** como banco — elimina a necessidade de infraestrutura externa para
   rodar o projeto localmente; a camada de persistência usa Spring Data JPA, o
   que tornaria a troca para outro banco relacional uma mudança de
