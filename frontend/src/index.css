@@ -1,0 +1,39 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* O Edge desenha um ícone de "mostrar senha" nativo que não segue o tema do
+   app. O toggle próprio fica no componente PasswordField. */
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear {
+  display: none;
+}
+
+/* Remove as setas de incremento nativas dos inputs numéricos (ex.: Qtd. do
+   pedido) — a UI usa digitação direta, não o stepper do navegador. */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
